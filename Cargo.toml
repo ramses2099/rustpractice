@@ -1,0 +1,11 @@
+[package]
+name = "rustpractice"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+axum = "0.8.1"
+tokio = "1.44.1"
