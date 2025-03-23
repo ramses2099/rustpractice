@@ -10,3 +10,9 @@ https://www.youtube.com/watch?v=QCktBeTkOjA&list=PLrmY5pVcnuE-_CP7XZ_44HN-mDrLQV
 ```
 cargo-modules structure --lib
 ```
+
+# create new branch
+git checkout -b feature
+git push origin 
+
+# create pull request
