@@ -26,3 +26,9 @@ use std::option::Option;
 - .ok converts between Result and Option.
 - .map converts to the same container but with a different type.
 - ? operator is used to propagate the absent of a value or a success up the stack.
+
+# Smart Pointer
+- Box<T>
+- Rc
+- Arc
+
