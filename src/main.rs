@@ -1,10 +1,12 @@
-pub mod helpers;
+use states::a::get_test;
 
-use crate::helpers::namehelpers::get_full_name;
-fn main() {
+mod states;
 
-    let full_name = get_full_name("Pedro", "Martinez");
-    println!("Full name: {}", full_name);
 
+fn main() -> Result<(), String> {
+    get_test();
+   
+  
+    Ok(())
 }
 

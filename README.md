@@ -32,3 +32,11 @@ use std::option::Option;
 - Rc
 - Arc
 
+# Trait
+- Markers
+- Derivable
+- Error Handler
+
+# Trait 
+- Required
+- Provider
