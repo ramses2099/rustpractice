@@ -40,3 +40,9 @@ use std::option::Option;
 # Trait 
 - Required
 - Provider
+
+# Collection
+- Vec<T>
+
+# Iterator methods
+.map(), .filter(), .foldl()
