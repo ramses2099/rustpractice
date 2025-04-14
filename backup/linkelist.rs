@@ -1,115 +1,103 @@
 #![allow(dead_code)]
 
-#[derive(Debug, PartialEq)]
-struct Node {
-    value: i32,
-    next: Link,
+
+#[derive(Debug)]
+pub struct Node<T> {
+    data: T,
+    next: Option<Box<Node<T>>>,
 }
 
-impl Node {
-    fn new(data: i32) -> Self {
+impl<T> Node<T> {
+    pub fn new(data: T) -> Self {
         Self {
-            value: data,
+            data,
             next: None,
         }
     }
 }
-type Link = Option<Box<Node>>;
 
-#[derive(Debug, PartialEq)]
-struct LinkeList {
-    head: Link,
+//
+#[derive(Debug)]
+pub struct LinkedList<T> {
+    head: Option<Box<Node<T>>>,
 }
-
-impl LinkeList {
-    fn new() -> Self {
+//
+impl<T> LinkedList<T> {
+    pub fn new() -> Self {
         Self { head: None }
     }
-    // Push an element to the front of the list (O(1))
-    fn push_front(&mut self, data: i32) {
-        let new_head = Box::new(Node {
-            value: data,
-            next: self.head.take(),
-        });
-        self.head = Some(new_head);
-    }
-    // Pop an element from the front of the list (O(1))
-    fn pop_front(&mut self) -> Option<i32> {
-        self.head.take().map(|node| {
-            self.head = node.next;
-            node.value
-        })
-    }
-    //
-    fn peek(&self) -> Option<&i32> {
-        self.head.as_ref().map(|node| &node.value)
-    }
-    //
-    fn push_back(&mut self, value: i32) {
-        let new_node = Box::new(Node::new(value));
-        //
-        match self.head.as_mut() {
-            None => {
-                self.head = Some(new_node);
-            }
-            Some(mut current) => {
-                while let Some(ref mut next_node) = current.next {
-                    current = next_node;
-                }
-                current.next = Some(new_node);
-            }
-        }
-    }
-    //
-    fn pop_back(&mut self) -> Option<i32> {
-        match self.head.as_mut() {
-            None => None,
-            Some(node) if node.next.is_none() => {
-                return self.pop_front();
-            }
-            Some(_) => {
-                let mut current = self.head.as_mut().unwrap();
-
-                while current.next.as_ref().unwrap().next.is_none() {
-                    current = current.next.as_mut().unwrap();
-                }
-
-                let last_node = current.next.take().unwrap();
-                Some(last_node.value)
-            }
-        }
-    }
-    //
-    fn length(&self) -> usize {
-        let mut count = 0;
-        let mut current = &self.head;
-        while let Some(node) = current {
-            count += 1;
-            current = &node.next;
-        }
-        count
-    }
-    //
-    fn is_empty(&self) -> bool {
+    // Checks if the linked list is empty
+    pub fn is_empty(&self) -> bool {
         self.head.is_none()
     }
-    //
-    fn print(&self) {
+    // Adds a new eleement at the beginning of the list (head)
+    pub fn push(&mut self, data: T) {
+        let mut new_node = Box::new(Node::new(data));
+        new_node.next = self.head.take();
+        self.head = Some(new_node);
+    }
+    // Removes and returns the elements at the beginnig of the list (head)
+    pub fn pop(&mut self) -> Option<T> {
+        self.head.take().map(|node| {
+            self.head = node.next;
+            node.data
+        })
+    }
+    // Returns a reference to the element at the beginning of the list (head).
+    pub fn peek(&self) -> Option<&T> {
+        self.head.as_ref().map(|node| &node.data)
+    }
+    // Appends a new element at the end of the list
+    pub fn append(&mut self, data: T) {
+        let new_node = Box::new(Node::new(data));
+        if self.is_empty() {
+            self.head = Some(new_node);
+            return;
+        }
+
+        let mut current = &mut self.head;
+        while let Some(node) = current {
+            if node.next.is_none() {
+                node.next = Some(new_node);
+                break;
+            }
+            current = &mut node.next;
+        }
+    }
+    // To list
+    pub fn to_list(&mut self, vec: Vec<T>) {
+        for e in vec {
+            self.append(e);
+        }
+    }
+    // To print
+    pub fn to_print(&self)
+    where T: std::fmt::Display, {
         let mut current = &self.head;
         while let Some(node) = current {
-            print!("{} -> ", node.value);
+            if node.next.is_none(){
+                print!("None");
+                return;
+            }
+            print!("{} -> ", node.data);
             current = &node.next;
         }
-        println!("None");
     }
 }
-
+//
 fn main() -> Result<(), String> {
-    let mut lst = LinkeList::new();
-    lst.push_back(10);
-    lst.push_back(20);
-    lst.push_back(30);
+    let mut list: LinkedList<i32> = LinkedList::new();
+    assert_eq!(list.is_empty(), true);
+    list.push(10);
+    list.push(20);
+    assert_eq!(list.is_empty(), false);
+    assert_eq!(list.pop(), Some(20));
 
-    lst.print();
+    println!("{:?}", list);
+    let mut list2: LinkedList<i32> = LinkedList::new();
+    list2.to_list(vec![1, 2, 3, 4]);
+    println!("{:?}", list2);
+    list2.to_print();
+
     Ok(())
 }
