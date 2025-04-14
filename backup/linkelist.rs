@@ -63,7 +63,10 @@ impl<T> LinkedList<T> {
             }
             current = &mut node.next;
         }
-    }
+    }  
+
+
+
     // To list
     pub fn to_list(&mut self, vec: Vec<T>) {
         for e in vec {
@@ -101,3 +104,4 @@ fn main() -> Result<(), String> {
 
     Ok(())
 }
+  

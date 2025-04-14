@@ -1,6 +1,5 @@
 #![allow(dead_code)]
 
-
 #[derive(Debug)]
 pub struct Node<T> {
     data: T,
@@ -64,6 +63,27 @@ impl<T> LinkedList<T> {
             current = &mut node.next;
         }
     }
+    // Remove the last element form the list and returns it.
+    pub fn pop_back(&mut self) -> Option<T> {
+        if self.is_empty() {
+            return None;
+        }
+
+        if self.head.as_ref().unwrap().next.is_none() {
+            return self.pop();
+        }
+
+        let mut current = &mut self.head;
+        while let Some(node) = current {
+            if node.next.as_ref().unwrap().next.is_none() {
+                return node.next.take().map(|n| n.data);
+            }
+            current = &mut node.next;
+        }
+
+        unreachable!("Should have found the last node");
+    }
+
     // To list
     pub fn to_list(&mut self, vec: Vec<T>) {
         for e in vec {
@@ -71,11 +91,10 @@ impl<T> LinkedList<T> {
         }
     }
     // To print
-    pub fn to_print(&self)
-    where T: std::fmt::Display, {
+    pub fn to_print(&self) where T: std::fmt::Display {
         let mut current = &self.head;
         while let Some(node) = current {
-            if node.next.is_none(){
+            if node.next.is_none() {
                 print!("None");
                 return;
             }
